@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Data Penduduk{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-brand">
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="admin-logo"
+        >
+        </div>
+
+        <div>
+            <h1>Dashboard Admin</h1>
+            <p>Data kependudukan Desa Gunung Jati</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="btn-admin btn-secondary"
+        >
+            Logout
+        </a>
+    </div>
+
+    <nav class="admin-nav">
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin') }}">
+            Data Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_tambah') }}">
+            Tambah Data
+        </a>
+
+        <a style="background: #ffffff; color: #0d4b3b;" href="{{ url_for('main.admin_edit') }}">
+            Edit Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_hapus') }}">
+            Hapus Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_import') }}">
+            Upload CSV
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_dokumentasi') }}">
+            Dokumentasi
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_riwayat') }}">
+            Riwayat Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.backup') }}">
+            Backup
+        </a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div style="background: #123b2a; color: #ffffff; border-color: #1d6a3b;" class="alert {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Cari Data Penduduk</h2>
+
+        <form method="GET" action="{{ url_for('main.admin_edit') }}">
+            <input
+                type="text"
+                name="search"
+                class="search-box"
+                placeholder="Cari berdasarkan NIK atau nama..."
+                value="{{ search }}"
+            >
+
+            <button type="submit" class="btn-admin">
+                Cari
+            </button>
+        </form>
+    </div>
+
+    <div id="edit-container">
+
+        {% for resident in residents %}
+
+        <div
+            class="card resident-edit-card"
+            data-search="
+                {{ resident.nik }}
+                {{ resident.nama }}
+            "
+        >
+
+            <h2>
+                {{ resident.nama }}
+            </h2>
+
+            <p>
+                <strong>NIK:</strong>
+                {{ resident.nik }}
+            </p>
+
+
+            <form
+                method="POST"
+                action="{{
+                    url_for(
+                        'main.edit_resident',
+                        resident_id=resident.id
+                    )
+                }}"
+            >
+
+                <div class="form-grid">
+                    <div class="form-group">
+
+                        <label>
+                            NIK
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nik"
+                            value="{{ resident.nik }}"
+                            maxlength="16"
+                            minlength="16"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Nama Lengkap
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nama"
+                            value="{{ resident.nama }}"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Jenis Kelamin
+                        </label>
+
+                        <select
+                            name="jenis_kelamin"
+                            required
+                        >
+
+                            {% for item in jenis_kelamin_options %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if resident.jenis_kelamin == item %}
+                                selected
+                                {% endif %}
+                            >
+                                {{ item }}
+                            </option>
+
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Dusun
+                        </label>
+
+                        <select
+                            name="dusun"
+                            required
+                        >
+
+                            {% for item in dusun_options %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if resident.dusun == item %}
+                                selected
+                                {% endif %}
+                            >
+                                {{ item }}
+                            </option>
+
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Tanggal Lahir
+                        </label>
+
+                        <input
+                            type="date"
+                            name="tanggal_lahir"
+                            value="{{ resident.tanggal_lahir }}"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Pekerjaan
+                        </label>
+
+                        <input
+                            type="text"
+                            name="pekerjaan"
+                            value="{{ resident.pekerjaan }}"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Pendidikan Terakhir
+                        </label>
+
+                        <select
+                            name="pendidikan"
+                            required
+                        >
+
+                            {% for item in pendidikan_options %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if resident.pendidikan == item %}
+                                selected
+                                {% endif %}
+                            >
+                                {{ item }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+                    </div>
+                </div>
+
+                <br>
+
+                <button
+                    type="submit"
+                    class="btn-admin"
+                >
+                    Simpan Perubahan
+                </button>
+            </form>
+        </div>
+
+        {% else %}
+
+        <div class="card">
+            Data penduduk tidak ditemukan.
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function filterCards(searchId, containerId) {
+    const input = document
+        .getElementById(searchId)
+        .value
+        .toLowerCase();
+
+    const container = document
+        .getElementById(containerId);
+
+    const cards = container.querySelectorAll(
+        ".resident-edit-card"
+    );
+
+    cards.forEach(function(card) {
+
+        const text = card
+            .getAttribute("data-search")
+            .toLowerCase();
+
+        if (text.includes(input)) {
+
+            card.style.display = "";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+    });
+}
+
+</script>
+{% endblock %}

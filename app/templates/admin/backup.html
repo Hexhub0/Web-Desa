@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Backup Data{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-brand">
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="admin-logo"
+        >
+        </div>
+
+        <div>
+            <h1>Dashboard Admin</h1>
+            <p>Data kependudukan Desa Gunung Jati</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="btn-admin btn-secondary"
+        >
+            Logout
+        </a>
+    </div>
+
+    <div class="admin-nav">
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin') }}">
+            Data Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_tambah') }}">
+            Tambah Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_edit') }}">
+            Edit Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_hapus') }}">
+            Hapus Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_import') }}">
+            Upload CSV
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_dokumentasi') }}">
+            Dokumentasi
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_riwayat') }}">
+            Riwayat Penduduk
+        </a>
+
+        <a style="background: #ffffff; color: #0d4b3b;" href="{{ url_for('main.backup') }}">
+            Backup
+        </a>
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div style="background: #123b2a; color: #ffffff; border-color: #1d6a3b;" class="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Buat Backup</h2>
+
+        <p>
+            Buat salinan data penduduk dalam format CSV.
+            Setiap backup akan disimpan berdasarkan tanggal
+            dan waktu pembuatannya.
+        </p>
+
+        <form
+            method="POST"
+            action="{{ url_for('main.create_backup') }}"
+        >
+
+            <button
+                type="submit"
+                class="btn-admin"
+            >
+                Buat Backup
+            </button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Daftar File Backup</h2>
+        <h4>File backup terbaru berada paling atas</h4>
+
+        {% if backup_files %}
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama File</th>
+                        <th>Tanggal Backup</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for file in backup_files %}
+                    <tr>
+                        <td>
+                            {{ file.filename }}
+                        </td>
+
+                        <td>
+                            {{ file.created.strftime('%d-%m-%Y %H:%M:%S') }}
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for(
+                                    'main.download_backup',
+                                    filename=file.filename
+                                ) }}"
+                                class="btn-admin"
+                            >
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+
+        <p>
+            Belum ada file backup.
+        </p>
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

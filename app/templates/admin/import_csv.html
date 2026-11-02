@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Upload CSV{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-brand">
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="admin-logo"
+        >
+        </div>
+
+        <div>
+            <h1>Dashboard Admin</h1>
+            <p>Data kependudukan Desa Gunung Jati</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="btn-admin btn-secondary"
+        >
+            Logout
+        </a>
+    </div>
+
+    <div class="admin-nav">
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin') }}">
+            Data Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_tambah') }}">
+            Tambah Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_edit') }}">
+            Edit Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_hapus') }}">
+            Hapus Data
+        </a>
+
+        <a style="background: #ffffff; color: #0d4b3b;" href="{{ url_for('main.admin_import') }}">
+            Upload CSV
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_dokumentasi') }}">
+            Dokumentasi
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_riwayat') }}">
+            Riwayat Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.backup') }}">
+            Backup
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div style="background: #123b2a; color: #ffffff; border-color: #1d6a3b;" class="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Import Data CSV</h2>
+
+        <p>
+            Pastikan file CSV memiliki kolom berikut:
+        </p>
+
+        <p>
+            <strong>
+                nik, nama, jenis_kelamin, dusun,
+                tanggal_lahir, pekerjaan, pendidikan_terakhir
+            </strong>
+        </p>
+
+        <form
+            method="POST"
+            action="{{ url_for('main.import_csv') }}"
+            enctype="multipart/form-data"
+        >
+
+            <div class="form-group">
+                <label for="file">Pilih File CSV</label>
+
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".csv"
+                    required
+                >
+            </div>
+
+            <br>
+
+            <button type="submit" class="btn-admin">
+                Upload CSV
+            </button>
+
+            <a
+                href="{{ url_for('main.admin') }}"
+                class="btn-admin btn-secondary"
+            >
+                Kembali
+            </a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

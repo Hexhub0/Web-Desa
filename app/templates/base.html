@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        Website Desa
+        {% endblock %}
+    </title>
+
+    {% if request.path.startswith('/admin') or request.path.startswith('/auth') %}
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/admin.css') }}">
+    {% else %}
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/dashboard.css') }}">
+    {% endif %}
+</head>
+
+<body>
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        function filterTable(
+            inputId,
+            tableId
+        ) {
+            const input =
+                document.getElementById(inputId);
+
+            const filter =
+                input.value.toLowerCase();
+
+            const table =
+                document.getElementById(tableId);
+
+            const rows =
+                table.querySelectorAll("tbody tr");
+
+            rows.forEach(
+                function(row) {
+
+                    const text =
+                        row.textContent.toLowerCase();
+
+                    if (
+                        text.includes(filter)
+                    ) {
+
+                        row.style.display = "";
+
+                    } else {
+
+                        row.style.display = "none";
+
+                    }
+                }
+            );
+        }
+
+        function filterCards(
+            inputId,
+            containerId
+        ) {
+            const input =
+                document.getElementById(inputId);
+
+            const filter =
+                input.value.toLowerCase();
+
+            const container =
+                document.getElementById(containerId);
+
+            const cards =
+                container.querySelectorAll(
+                    ".resident-card"
+                );
+
+            cards.forEach(
+                function(card) {
+
+                    const text =
+                        card.textContent.toLowerCase();
+
+                    if (
+                        text.includes(filter)
+                    ) {
+
+                        card.style.display = "";
+
+                    } else {
+
+                        card.style.display = "none";
+
+                    }
+                }
+            );
+        }
+
+    </script>
+</body>
+</html>

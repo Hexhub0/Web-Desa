@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login Pemerintah Desa
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+    <div class="login-card">
+        <h1>
+            Login Pemerintah Desa
+        </h1>
+
+        <p>
+            Silakan masuk untuk mengelola data desa.
+        </p>
+
+        {% with messages = get_flashed_messages(
+            with_categories=true
+        ) %}
+
+            {% for category, message in messages %}
+
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+        <form
+            method="POST"
+            action="{{ url_for('auth.login') }}"
+        >
+
+            <label>
+                Username
+            </label>
+
+            <input
+                type="text"
+                name="username"
+                required
+            >
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="btn btn-primary full"
+            >
+                Login
+            </button>
+        </form>
+
+        <a
+            href="{{ url_for('main.index') }}"
+            class="back-link"
+        >
+            ← Kembali ke Website Desa
+        </a>
+    </div>
+</div>
+
+{% endblock %}

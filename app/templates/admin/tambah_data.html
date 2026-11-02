@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Tambah Data Penduduk{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-brand">
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="admin-logo"
+        >
+        </div>
+
+        <div>
+            <h1>Dashboard Admin</h1>
+            <p>Data kependudukan Desa Gunung Jati</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="btn-admin btn-secondary"
+        >
+            Logout
+        </a>
+    </div>
+
+    <nav class="admin-nav">
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin') }}">
+            Data Penduduk
+        </a>
+
+        <a style="background: #ffffff; color: #0d4b3b;" href="{{ url_for('main.admin_tambah') }}">
+            Tambah Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_edit') }}">
+            Edit Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_hapus') }}">
+            Hapus Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_import') }}">
+            Upload CSV
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_dokumentasi') }}">
+            Dokumentasi
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_riwayat') }}">
+            Riwayat Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.backup') }}">
+            Backup
+        </a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div style="background: #123b2a; color: #ffffff; border-color: #1d6a3b;" class="alert {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>
+            Form Data Penduduk
+        </h2>
+
+        <form
+            method="POST"
+            action="{{ url_for('main.add_resident') }}"
+        >
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nik">
+                        NIK
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nik"
+                        name="nik"
+                        maxlength="16"
+                        minlength="16"
+                        placeholder="Masukkan 16 digit NIK"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="nama">
+                        Nama Lengkap
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        placeholder="Masukkan nama lengkap"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="jenis_kelamin">
+                        Jenis Kelamin
+                    </label>
+
+                    <select
+                        id="jenis_kelamin"
+                        name="jenis_kelamin"
+                        required
+                    >
+
+                        <option value="">
+                            Pilih jenis kelamin
+                        </option>
+
+                        {% for item in jenis_kelamin_options %}
+
+                        <option value="{{ item }}">
+                            {{ item }}
+                        </option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dusun">
+                        Dusun
+                    </label>
+
+                    <select
+                        id="dusun"
+                        name="dusun"
+                        required
+                    >
+
+                        <option value="">
+                            Pilih dusun
+                        </option>
+
+                        {% for item in dusun_options %}
+
+                        <option value="{{ item }}">
+                            {{ item }}
+                        </option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tanggal_lahir">
+                        Tanggal Lahir
+                    </label>
+
+                    <input
+                        type="date"
+                        id="tanggal_lahir"
+                        name="tanggal_lahir"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="pekerjaan">
+                        Pekerjaan
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pekerjaan"
+                        name="pekerjaan"
+                        placeholder="Masukkan pekerjaan"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="pendidikan">
+                        Pendidikan Terakhir
+                    </label>
+
+                    <select
+                        id="pendidikan"
+                        name="pendidikan"
+                        required
+                    >
+
+                        <option value="">
+                            Pilih pendidikan terakhir
+                        </option>
+
+                        {% for item in pendidikan_options %}
+
+                        <option value="{{ item }}">
+                            {{ item }}
+                        </option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <br>
+
+            <button
+                type="submit"
+                class="btn-admin"
+            >
+                Tambah Data
+            </button>
+
+            <a
+                href="{{ url_for('main.admin') }}"
+                class="btn-admin btn-secondary"
+            >
+                Kembali
+            </a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

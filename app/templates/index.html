@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Desa{% endblock %}
+
+{% block content %}
+<header class="public-header">
+
+    <div class="village-brand">
+
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="village-logo"
+        >
+
+        <div>
+            <h1>Desa Gunung Jati</h1>
+            <p>Sistem Informasi Data Kependudukan</p>
+        </div>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('auth.login') }}"
+        class="login-button"
+    >
+        Login Pemerintah Desa
+    </a>
+
+</header>
+<main class="dashboard-container">
+    <div class="dashboard-title">
+
+        <h2>Dashboard</h2>
+
+        <p>
+            Selamat datang di Sistem Informasi Data Kependudukan Desa Gunung Jati.
+        </p>
+
+    </div>
+
+    <div class="population-grid">
+        <div class="population-card">
+
+            <div class="population-icon">
+                👥
+            </div>
+            <div>
+                <div class="population-label">
+                    Total Penduduk
+                </div>
+
+                <div class="population-number">
+                    {{ total_penduduk }}
+                </div>
+
+                <div class="population-unit">
+                    jiwa
+                </div>
+            </div>
+        </div>
+
+        <div class="population-card">
+
+            <div class="population-icon">
+                👨
+            </div>
+
+            <div>
+
+                <div class="population-label">
+                    Laki-laki
+                </div>
+
+                <div class="population-number">
+                    {{ laki_laki }}
+                </div>
+
+                <div class="population-unit">
+                    jiwa
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="population-card">
+
+            <div class="population-icon">
+                👩
+            </div>
+            <div>
+                <div class="population-label">
+                    Perempuan
+                </div>
+
+                <div class="population-number">
+                    {{ perempuan }}
+                </div>
+
+                <div class="population-unit">
+                    jiwa
+                </div>
+            </div>
+        </div>
+
+        <div class="population-card prediction-card">
+
+            <div class="population-icon prediction-icon">
+                📈
+            </div>
+
+            <div class="prediction-content">
+
+                <div class="population-label">
+                    Prediksi Penduduk
+                </div>
+
+
+                {% if prediction.prediction is not none %}
+
+                    <div class="prediction-year">
+                        Tahun {{ prediction.tahun }}
+                    </div>
+
+                    <div class="prediction-number">
+                        {{ prediction.prediction }}
+                        <span>jiwa</span>
+                    </div>
+
+                {% else %}
+
+                    <div class="prediction-empty">
+                        {{ prediction.message }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <section class="population-chart-card">
+        <div class="chart-heading">
+            <div>
+                <h2>📈 Riwayat dan Prediksi Penduduk</h2>
+                <p>
+                    Perbandingan jumlah penduduk dengan
+                    hasil prediksi tahun berikutnya.
+                </p>
+            </div>
+        </div>
+
+        <div class="population-chart-container">
+            <canvas
+                id="publicPopulationChart"
+                data-years='{{ history_years | tojson | forceescape }}'
+                data-counts='{{ history_counts | tojson | forceescape }}'
+                data-prediction-year="{{ prediction.tahun if prediction.prediction is not none else '' }}"
+                data-prediction-value="{{ prediction.prediction if prediction.prediction is not none else '' }}"
+            ></canvas>
+        </div>
+
+        {% if prediction.prediction is none %}
+        <p class="chart-note">
+            {{ prediction.message }}
+        </p>
+        {% else %}
+        <p class="chart-note">
+            Prediksi tahun {{ prediction.tahun }}:
+            <strong>{{ prediction.prediction }} jiwa</strong>.
+        </p>
+        {% endif %}
+    </section>
+
+    <section class="about-village">
+
+        <div class="about-content">
+
+            <div class="about-title">
+                <h2>Tentang Desa</h2>
+            </div>
+
+            <p>
+                Gunung Jati adalah sebuah desa yang terletak di wilayah Kecamatan Jabung, Kabupaten Malang, Provinsi Jawa Timur.
+                Jarak tempuh dari Kota Malang menuju Desa Gunung Jati adalah 21 Km.
+                Foto Kantor dan Balai Desa Gunung Jati Kecamatan Jabung Kabupaten Malang
+            </p>
+
+            <p>
+                Luas Desa Gunung Jati 1.691, 5 ha.
+                Jumlah dusun di Desa Gunung Jati berjumlah 2 dusun yaitu Dusun Karajan sebanyak 19 RT dalam 7 RW
+                kemudian Dusun Jatirejo sebanyak 4 RT dalam 1 RW.
+            </p>
+
+            <p>
+                Desa Gunung Jati Berbatasan Dengan Beberapa Daerah Yaitu: Dusun Karajan Berada Dipusat Desa Gunung Jati, Sedangkan Dusun Jatirejo Berada Di Pedukuhan.
+            </p>
+
+            <p>
+                Kode Wilayah Kelurahan/Desa: 35.07.17.2012.
+            </p>
+
+            <p>
+                Jumlah Penduduk: 4.161 Jiwa / Orang
+            </p>
+        </div>
+
+
+        <div class="about-image">
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='images/foto_desa.jpg'
+                ) }}"
+                alt="Foto Desa"
+            >
+        </div>
+    </section>
+
+    {% if activities %}
+    <section class="public-documentation">
+        <div class="section-heading">
+            <h2>
+                Dokumentasi Kegiatan Desa
+            </h2>
+
+            <p>
+                Dokumentasi kegiatan yang telah dilaksanakan
+                di desa.
+            </p>
+        </div>
+
+        {% for activity in activities %}
+        <div class="activity-section">
+            <h3>
+                {{ activity.nama_kegiatan }}
+            </h3>
+
+            <div class="activity-date">
+                {{ activity.tanggal }}
+            </div>
+
+            <div class="documentation-grid">
+                {% for image in activity.images %}
+                <div class="documentation-item">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + image.filename
+                        ) }}"
+                        alt="{{ activity.nama_kegiatan }}"
+                    >
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+</main>
+
+<footer class="public-footer">
+    <div class="footer-left">
+        <strong>
+            Desa Gunung Jati
+        </strong>
+
+        <span>
+            |
+        </span>
+
+        <span>
+            Sistem Informasi Data Kependudukan
+        </span>
+    </div>
+
+    <div class="footer-right">
+        <span>
+            © 2026 Desa Gunung Jati. Semua hak dilindungi.
+        </span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

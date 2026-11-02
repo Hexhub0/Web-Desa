@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Data Penduduk{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-brand">
+        <img
+            src="{{ url_for('static', filename='images/logo_desa.png') }}"
+            alt="Logo Desa"
+            class="admin-logo"
+        >
+        </div>
+
+        <div>
+            <h1>Dashboard Admin</h1>
+            <p>Data kependudukan Desa Gunung Jati</p>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="btn-admin btn-secondary"
+        >
+            Logout
+        </a>
+    </div>
+
+    <nav class="admin-nav">
+        <a style="background: #ffffff; color: #0d4b3b;" href="{{ url_for('main.admin') }}">
+            Data Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_tambah') }}">
+            Tambah Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_edit') }}">
+            Edit Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_hapus') }}">
+            Hapus Data
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_import') }}">
+            Upload CSV
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_dokumentasi') }}">
+            Dokumentasi
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.admin_riwayat') }}">
+            Riwayat Penduduk
+        </a>
+
+        <a style="background: #0d4b3b; color: white;" href="{{ url_for('main.backup') }}">
+            Backup
+        </a>
+    </nav>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">
+                Total Penduduk
+            </div>
+
+            <div class="number">
+                {{ total }}
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="label">
+                Laki-laki
+            </div>
+
+            <div class="number">
+                {{ laki_laki }}
+            </div>
+        </div>
+
+
+        <div class="stat-card">
+            <div class="label">
+                Perempuan
+            </div>
+
+            <div class="number">
+                {{ perempuan }}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>
+            Daftar Penduduk
+        </h2>
+
+        <input
+            type="text"
+            id="search-penduduk"
+            class="search-box"
+            placeholder="Cari NIK, nama, dusun, pekerjaan..."
+            onkeyup="filterTable(
+                'search-penduduk',
+                'tabel-penduduk'
+            )"
+        >
+
+        <div class="table-wrapper">
+            <table id="tabel-penduduk">
+                <thead>
+                    <tr>
+                        <th>NIK</th>
+                        <th>Nama</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Dusun</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Pekerjaan</th>
+                        <th>Pendidikan Terakhir</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for resident in residents %}
+                    <tr>
+                        <td>
+                            {{ resident.nik }}
+                        </td>
+
+                        <td>
+                            {{ resident.nama }}
+                        </td>
+
+                        <td>
+                            {{ resident.jenis_kelamin }}
+                        </td>
+
+                        <td>
+                            {{ resident.dusun }}
+                        </td>
+
+                        <td>
+                            {{ resident.tanggal_lahir }}
+                        </td>
+
+                        <td>
+                            {{ resident.pekerjaan }}
+                        </td>
+
+                        <td>
+                            {{ resident.pendidikan }}
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="7">
+                            Belum ada data penduduk.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
