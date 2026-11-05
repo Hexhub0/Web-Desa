@@ -95,7 +95,3 @@ Akses aplikasi melalui browser:
 ```text
 http://127.0.0.1:8000
 ```
-
-## 👥 Kontributor
-
-Project ini dikembangkan secara berkelompok sebagai bagian dari tugas perkuliahan.
